@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Receitas — Nutrição Saudável</title>
+  <meta name="description" content="Receitas saudáveis com calorias e filtros por categoria." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" /><span>Nutrição Saudável</span></a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a href="/">Início</a></li>
+          <li><a href="/calculadoras.html">Calculadoras</a></li>
+          <li><a class="active" href="/receitas.html">Receitas</a></li>
+          <li><a href="/planos.html">Planos</a></li>
+          <li><a href="/dicas.html">Dicas</a></li>
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Alternar tema">Tema</button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <h1>Receitas</h1>
+
+    <section class="card">
+      <form id="filtros" class="form-row" role="search">
+        <label>Busca
+          <input name="q" placeholder="Ex.: frango, quinoa" />
+        </label>
+        <label>Categoria
+          <select name="cat">
+            <option value="">Todas</option>
+            <option>Café da manhã</option>
+            <option>Almoço</option>
+            <option>Jantar</option>
+            <option>Lanche</option>
+            <option>Vegetariana</option>
+          </select>
+        </label>
+      </form>
+    </section>
+
+    <div id="lista-receitas" class="grid cols-3 section"></div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© <span id="year"></span> Nutrição Saudável</span>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script>
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    const receitas = [
+      { titulo: 'Overnight oats com frutas', kcal: 320, cat: 'Café da manhã', tags: ['aveia','frutas'] },
+      { titulo: 'Salada de grão-de-bico', kcal: 410, cat: 'Almoço', tags: ['vegetariana','leguminosas'] },
+      { titulo: 'Frango grelhado e legumes', kcal: 530, cat: 'Jantar', tags: ['frango','legumes'] },
+      { titulo: 'Wrap integral de atum', kcal: 380, cat: 'Lanche', tags: ['atum','wrap'] },
+      { titulo: 'Quinoa com legumes', kcal: 450, cat: 'Vegetariana', tags: ['quinoa','legumes'] },
+    ];
+    const filtros = document.getElementById('filtros');
+    const lista = document.getElementById('lista-receitas');
+
+    function render(items) {
+      if (!lista) return;
+      lista.innerHTML = items.map(r => `
+        <article class="card">
+          <h3>${r.titulo}</h3>
+          <p class="muted">${r.kcal} kcal — ${r.cat}</p>
+          <a class="btn ghost" href="#">Ver receita</a>
+        </article>
+      `).join('');
+    }
+    render(receitas);
+
+    filtros?.addEventListener('input', () => {
+      const fd = new FormData(filtros);
+      const q = String(fd.get('q') || '').toLowerCase();
+      const cat = String(fd.get('cat') || '');
+      const filtradas = receitas.filter(r => {
+        const okQ = !q || r.titulo.toLowerCase().includes(q) || r.tags.some(t => t.includes(q));
+        const okC = !cat || r.cat === cat;
+        return okQ && okC;
+      });
+      render(filtradas);
+    });
+  </script>
+</body>
+</html>

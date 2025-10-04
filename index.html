@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nutrição Saudável — Vida leve e equilibrada</title>
+  <meta name="description" content="Site completo de nutrição saudável: receitas, planos de refeição, calculadoras (IMC, TDEE), dicas e contato." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="/">
+        <img src="/favicon.svg" alt="Nutrição Saudável" />
+        <span>Nutrição Saudável</span>
+      </a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a class="active" href="/">Início</a></li>
+          <li><a href="/calculadoras.html">Calculadoras</a></li>
+          <li><a href="/receitas.html">Receitas</a></li>
+          <li><a href="/planos.html">Planos</a></li>
+          <li><a href="/dicas.html">Dicas</a></li>
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Alternar tema">Tema</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h1>Vida leve com escolhas inteligentes</h1>
+        <p>Alimente-se bem, sem complicação. Ferramentas, receitas e planos prontos para uma rotina saudável.</p>
+        <div class="actions">
+          <a class="btn primary" href="/calculadoras.html">Calcular IMC e TDEE</a>
+          <a class="btn ghost" href="#como-funciona">Como funciona</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Meta da semana</h3>
+        <p class="muted">Troque refrigerantes por água saborizada em três dias.</p>
+        <form id="meta-form">
+          <div class="form-row">
+            <label>
+              Meta
+              <input name="goal" placeholder="Ex.: Caminhar 20 min" required />
+            </label>
+            <label>
+              Dias
+              <select name="days">
+                <option>3</option>
+                <option>5</option>
+                <option>7</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn" type="submit">Salvar meta</button>
+          <p id="meta-msg" class="muted" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="como-funciona" class="section">
+      <h2>Como funciona</h2>
+      <p class="muted">Siga três pilares simples para resultados sustentáveis.</p>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Planejamento</h3>
+          <p>Monte um cardápio semanal com base no seu gasto energético e preferências.</p>
+        </div>
+        <div class="card">
+          <h3>Alimentos reais</h3>
+          <p>Receitas balanceadas com ingredientes acessíveis e minimamente processados.</p>
+        </div>
+        <div class="card">
+          <h3>Constância</h3>
+          <p>Metas curtas, acompanhamento simples e reforço positivo.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Receitas em destaque</h2>
+      <div id="receitas-destaque" class="grid cols-3"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© <span id="year"></span> Nutrição Saudável</span>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script>
+    // Conteúdo dinâmico leve da home
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    const metaForm = document.getElementById('meta-form');
+    const metaMsg = document.getElementById('meta-msg');
+    if (metaForm) {
+      metaForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const form = new FormData(metaForm);
+        const goal = String(form.get('goal') || '').trim();
+        const days = Number(form.get('days') || 3);
+        localStorage.setItem('weekly_goal', JSON.stringify({ goal, days, at: Date.now() }));
+        metaMsg.textContent = 'Meta salva! Você consegue!';
+      });
+    }
+
+    const receitas = [
+      { titulo: 'Bowl de Quinoa e Legumes', kcal: 420 },
+      { titulo: 'Smoothie Verde Energizante', kcal: 190 },
+      { titulo: 'Frango com Batata Doce', kcal: 520 }
+    ];
+    const lista = document.getElementById('receitas-destaque');
+    if (lista) {
+      lista.innerHTML = receitas.map(r => `
+        <article class="card">
+          <h3>${r.titulo}</h3>
+          <p class="muted">${r.kcal} kcal</p>
+          <a class="btn ghost" href="/receitas.html">Ver receita</a>
+        </article>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

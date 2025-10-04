@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planos — Nutrição Saudável</title>
+  <meta name="description" content="Gere um plano alimentar semanal baseado no seu TDEE." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" /><span>Nutrição Saudável</span></a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a href="/">Início</a></li>
+          <li><a href="/calculadoras.html">Calculadoras</a></li>
+          <li><a href="/receitas.html">Receitas</a></li>
+          <li><a class="active" href="/planos.html">Planos</a></li>
+          <li><a href="/dicas.html">Dicas</a></li>
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Alternar tema">Tema</button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <h1>Planos de Refeição</h1>
+    <section class="card">
+      <form id="form-plano" class="grid cols-3">
+        <label>Calorias alvo (kcal/dia)
+          <input name="kcal" type="number" min="1200" max="4000" required />
+        </label>
+        <label>Objetivo
+          <select name="objetivo">
+            <option value="manutencao">Manutenção</option>
+            <option value="emagrecimento">Emagrecimento</option>
+            <option value="ganho">Ganho de massa</option>
+          </select>
+        </label>
+        <div>
+          <button class="btn primary" type="submit">Gerar plano</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="plano-resultado" class="section grid cols-2"></section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© <span id="year"></span> Nutrição Saudável</span>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script>
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    const banco = {
+      cafe: ['Ovos mexidos com espinafre', 'Iogurte com granola e frutas', 'Aveia com banana e chia'],
+      almoco: ['Frango grelhado + arroz integral + salada', 'Peixe assado + batata doce + brócolis', 'Quinoa + grão-de-bico + legumes'],
+      jantar: ['Sopa de legumes + pão integral', 'Tortilha de ovos + salada', 'Tapioca com queijo e tomate'],
+      lanche: ['Castanhas + fruta', 'Sanduíche integral de atum', 'Smoothie proteico']
+    };
+
+    function distribuirCalorias(total, objetivo) {
+      const ajuste = objetivo === 'emagrecimento' ? -0.15 : objetivo === 'ganho' ? 0.15 : 0;
+      const alvo = Math.round(total * (1 + ajuste));
+      return {
+        cafe: Math.round(alvo * 0.25),
+        almoco: Math.round(alvo * 0.35),
+        jantar: Math.round(alvo * 0.30),
+        lanche: Math.round(alvo * 0.10)
+      };
+    }
+
+    function gerarPlano(kcal, objetivo) {
+      const dist = distribuirCalorias(kcal, objetivo);
+      const dias = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+      return dias.map((dia, i) => {
+        function pick(arr){ return arr[(i + arr.length) % arr.length]; }
+        return {
+          dia,
+          cafe: { refeicao: pick(banco.cafe), kcal: dist.cafe },
+          almoco: { refeicao: pick(banco.almoco), kcal: dist.almoco },
+          jantar: { refeicao: pick(banco.jantar), kcal: dist.jantar },
+          lanche: { refeicao: pick(banco.lanche), kcal: dist.lanche }
+        };
+      });
+    }
+
+    const formPlano = document.getElementById('form-plano');
+    const saida = document.getElementById('plano-resultado');
+    formPlano?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(formPlano);
+      const kcal = Number(fd.get('kcal'));
+      const objetivo = String(fd.get('objetivo'));
+      const plano = gerarPlano(kcal, objetivo);
+      saida.innerHTML = plano.map(d => `
+        <article class="card">
+          <h3>${d.dia}</h3>
+          <ul>
+            <li><strong>Café:</strong> ${d.cafe.refeicao} — ${d.cafe.kcal} kcal</li>
+            <li><strong>Almoço:</strong> ${d.almoco.refeicao} — ${d.almoco.kcal} kcal</li>
+            <li><strong>Jantar:</strong> ${d.jantar.refeicao} — ${d.jantar.kcal} kcal</li>
+            <li><strong>Lanche:</strong> ${d.lanche.refeicao} — ${d.lanche.kcal} kcal</li>
+          </ul>
+        </article>
+      `).join('');
+    });
+  </script>
+</body>
+</html>
