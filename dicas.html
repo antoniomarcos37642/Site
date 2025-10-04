@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dicas — Nutrição Saudável</title>
+  <meta name="description" content="Dicas práticas de alimentação saudável, hidratação e organização." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" /><span>Nutrição Saudável</span></a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a href="/">Início</a></li>
+          <li><a href="/calculadoras.html">Calculadoras</a></li>
+          <li><a href="/receitas.html">Receitas</a></li>
+          <li><a href="/planos.html">Planos</a></li>
+          <li><a class="active" href="/dicas.html">Dicas</a></li>
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Alternar tema">Tema</button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <h1>Dicas Práticas</h1>
+    <div class="grid cols-2">
+      <article class="card">
+        <h3>Monte seu prato</h3>
+        <p>Metade do prato de vegetais, 1/4 proteína, 1/4 carboidratos integrais. Inclua gorduras boas.</p>
+      </article>
+      <article class="card">
+        <h3>Hidratação</h3>
+        <p>Comece o dia com água. Mantenha uma garrafa por perto e some chás sem açúcar.</p>
+      </article>
+      <article class="card">
+        <h3>Planejamento semanal</h3>
+        <p>Liste 5 receitas base e faça compras com lista. Deixe frutas lavadas e porcionadas.</p>
+      </article>
+      <article class="card">
+        <h3>Snacks inteligentes</h3>
+        <p>Castanhas, iogurte natural, frutas, legumes crus com homus. Evite ultraprocessados.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© <span id="year"></span> Nutrição Saudável</span>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script>
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

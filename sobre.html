@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre — Nutrição Saudável</title>
+  <meta name="description" content="Nossa missão é tornar a nutrição simples, acessível e saborosa." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" /><span>Nutrição Saudável</span></a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a href="/">Início</a></li>
+          <li><a href="/calculadoras.html">Calculadoras</a></li>
+          <li><a href="/receitas.html">Receitas</a></li>
+          <li><a href="/planos.html">Planos</a></li>
+          <li><a href="/dicas.html">Dicas</a></li>
+          <li><a class="active" href="/sobre.html">Sobre</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Alternar tema">Tema</button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <h1>Sobre</h1>
+    <article class="card">
+      <p>Este projeto nasceu da vontade de simplificar a alimentação saudável. Reunimos ferramentas e conteúdo confiável para apoiar mudanças reais no dia a dia.</p>
+      <p>Nossa abordagem é baseada em evidências, priorizando alimentos in natura e minimamente processados, sem extremismos.</p>
+    </article>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© <span id="year"></span> Nutrição Saudável</span>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script>
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

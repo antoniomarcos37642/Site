@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadoras — Nutrição Saudável</title>
+  <meta name="description" content="Calcule seu IMC e TDEE para um plano alimentar adequado." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" /><span>Nutrição Saudável</span></a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a href="/">Início</a></li>
+          <li><a class="active" href="/calculadoras.html">Calculadoras</a></li>
+          <li><a href="/receitas.html">Receitas</a></li>
+          <li><a href="/planos.html">Planos</a></li>
+          <li><a href="/dicas.html">Dicas</a></li>
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Alternar tema">Tema</button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <h1>Calculadoras</h1>
+
+    <section class="card">
+      <h2>IMC (Índice de Massa Corporal)</h2>
+      <form id="form-imc" class="grid cols-3">
+        <label>Peso (kg)
+          <input name="peso" type="number" min="1" step="0.1" required />
+        </label>
+        <label>Altura (cm)
+          <input name="altura" type="number" min="50" step="0.1" required />
+        </label>
+        <div>
+          <button class="btn primary" type="submit">Calcular</button>
+        </div>
+      </form>
+      <p id="imc-resultado" class="muted" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card">
+      <h2>TDEE (Gasto Energético Diário)</h2>
+      <form id="form-tdee" class="grid cols-3">
+        <label>Sexo
+          <select name="sexo" required>
+            <option value="f">Feminino</option>
+            <option value="m">Masculino</option>
+          </select>
+        </label>
+        <label>Idade (anos)
+          <input name="idade" type="number" min="10" max="100" required />
+        </label>
+        <label>Altura (cm)
+          <input name="altura" type="number" min="120" max="230" required />
+        </label>
+        <label>Peso (kg)
+          <input name="peso" type="number" min="30" max="250" step="0.1" required />
+        </label>
+        <label>Nível de atividade
+          <select name="atividade" required>
+            <option value="1.2">Sedentário</option>
+            <option value="1.375">Leve (1-3x/sem)</option>
+            <option value="1.55">Moderado (3-5x/sem)</option>
+            <option value="1.725">Intenso (6-7x/sem)</option>
+            <option value="1.9">Muito intenso (2x/dia)</option>
+          </select>
+        </label>
+        <div>
+          <button class="btn primary" type="submit">Calcular</button>
+        </div>
+      </form>
+      <p id="tdee-resultado" class="muted" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© <span id="year"></span> Nutrição Saudável</span>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script>
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    const formIMC = document.getElementById('form-imc');
+    const imcRes = document.getElementById('imc-resultado');
+    formIMC?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(formIMC);
+      const peso = Number(fd.get('peso'));
+      const alturaM = Number(fd.get('altura')) / 100;
+      if (!peso || !alturaM) return;
+      const imc = peso / (alturaM * alturaM);
+      let faixa = '';
+      if (imc < 18.5) faixa = 'Abaixo do peso';
+      else if (imc < 25) faixa = 'Peso normal';
+      else if (imc < 30) faixa = 'Sobrepeso';
+      else faixa = 'Obesidade';
+      imcRes.textContent = `IMC: ${imc.toFixed(1)} — ${faixa}`;
+    });
+
+    const formTDEE = document.getElementById('form-tdee');
+    const tdeeRes = document.getElementById('tdee-resultado');
+    formTDEE?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(formTDEE);
+      const sexo = String(fd.get('sexo'));
+      const idade = Number(fd.get('idade'));
+      const altura = Number(fd.get('altura'));
+      const peso = Number(fd.get('peso'));
+      const fator = Number(fd.get('atividade'));
+      // Fórmula Mifflin-St Jeor
+      const bmr = (sexo === 'm')
+        ? (10 * peso + 6.25 * altura - 5 * idade + 5)
+        : (10 * peso + 6.25 * altura - 5 * idade - 161);
+      const tdee = bmr * fator;
+      tdeeRes.textContent = `TDEE estimado: ${Math.round(tdee)} kcal/dia`;
+    });
+  </script>
+</body>
+</html>

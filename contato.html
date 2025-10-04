@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contato — Nutrição Saudável</title>
+  <meta name="description" content="Fale conosco: dúvidas, sugestões ou parcerias." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" /><span>Nutrição Saudável</span></a>
+      <nav aria-label="Principal">
+        <ul>
+          <li><a href="/">Início</a></li>
+          <li><a href="/calculadoras.html">Calculadoras</a></li>
+          <li><a href="/receitas.html">Receitas</a></li>
+          <li><a href="/planos.html">Planos</a></li>
+          <li><a href="/dicas.html">Dicas</a></li>
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a class="active" href="/contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="Alternar tema">Tema</button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <h1>Contato</h1>
+    <form id="form-contato" class="grid cols-2" novalidate>
+      <label>Nome
+        <input name="nome" required />
+      </label>
+      <label>Email
+        <input name="email" type="email" required />
+      </label>
+      <label style="grid-column: 1 / -1;">Mensagem
+        <textarea name="mensagem" rows="6" required style="width:100%; resize:vertical;"></textarea>
+      </label>
+      <div>
+        <button class="btn primary" type="submit">Enviar</button>
+      </div>
+      <p id="contato-msg" class="muted" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© <span id="year"></span> Nutrição Saudável</span>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script>
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    const form = document.getElementById('form-contato');
+    const msg = document.getElementById('contato-msg');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const nome = String(fd.get('nome')||'').trim();
+      const email = String(fd.get('email')||'').trim();
+      const mensagem = String(fd.get('mensagem')||'').trim();
+
+      if (!nome || !email || !mensagem) {
+        msg.textContent = 'Por favor, preencha todos os campos.';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.textContent = 'Informe um e-mail válido.';
+        return;
+      }
+      // Simula envio
+      msg.textContent = 'Mensagem enviada! Obrigado pelo contato.';
+      form.reset();
+    });
+  </script>
+</body>
+</html>
